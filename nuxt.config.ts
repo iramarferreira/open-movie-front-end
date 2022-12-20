@@ -32,7 +32,9 @@ export default defineNuxtConfig({
     apiSecret: '123',
     // Keys within public are also exposed client-side
     public: {
-      API_BASE_URL_TST: process.env.API_BASE_URL_TST || 'https://tstapi.ffcloud.com.br' ,
+      API_BASE_URL_TST: process.env.API_BASE_URL_TST || '' ,
+      API_BASE_URL_OMDB: process.env.API_BASE_URL_OMDB || '' ,
+      API_KEY: process.env.API_KEY || '' ,
     }
   }
 

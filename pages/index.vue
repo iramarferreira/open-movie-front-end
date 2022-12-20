@@ -26,7 +26,7 @@ const inputPassword = ref('')
 
 
 onMounted(() => {
-  if(localStorage.getItem('user')){
+  if (localStorage.getItem('user')) {
     user.value = JSON.parse(localStorage.getItem('user'))
     inputEmail.value = user.value.email
     inputPassword.value = user.value.password
@@ -34,7 +34,7 @@ onMounted(() => {
 })
 
 watch(rememberCheck, (newValue) => {
-  if(newValue){
+  if (newValue) {
     localStorage.setItem('user', JSON.stringify(user.value))
   }
   console.log(newValue)
@@ -42,17 +42,17 @@ watch(rememberCheck, (newValue) => {
 
 
 watch(inputEmail, (newValue) => {
-  
+
   user.value.email = newValue
-  if(rememberCheck.value){
+  if (rememberCheck.value) {
     localStorage.setItem('user', JSON.stringify(user.value))
   }
 })
 
 watch(inputPassword, (newValue) => {
-  
+
   user.value.password = newValue;
-  if(rememberCheck.value){
+  if (rememberCheck.value) {
     localStorage.setItem('user', JSON.stringify(user.value))
   }
 })
@@ -67,7 +67,7 @@ async function signIn() {
 
   console.log(user.value)
   // check empty fields
-  if (user.value.email.length != 0 && user.value.password.length != 0) {
+  if (user.value.email?.length != 0 && user.value.password?.length != 0) {
     let response;
     try {
       let objRequest = {
@@ -82,7 +82,7 @@ async function signIn() {
         localStorage.setItem('token', response.data.user.token)
         window.location.href = '/home'
 
-      
+
       }
     } catch (error) {
       if (error?.response?.status == 401) {
@@ -132,7 +132,7 @@ function toggleSecret() {
       <div class="flex relative w-full max-w-sm m-1 items-center justify-end">
         <input v-if="isPasswordSecret" type="password" placeholder="password" v-model="inputPassword"
           class="input input-bordered   w-full max-w-sm  " />
-        <input v-else  type="text" placeholder="password" v-model="inputPassword"
+        <input v-else type="text" placeholder="password" v-model="inputPassword"
           class="input input-bordered   w-full max-w-sm  " />
 
         <button @click="toggleSecret" class="absolute mr-2">
