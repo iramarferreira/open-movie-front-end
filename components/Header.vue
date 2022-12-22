@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline'
 
+
 function signOut(){
     localStorage.removeItem('token')
     window.location.href = '/'

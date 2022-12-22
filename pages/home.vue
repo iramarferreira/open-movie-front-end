@@ -6,12 +6,14 @@ import axios from 'axios'
 import ModalSimple from '~~/components/ModalSimple.vue';
 import CardMovie from '../components/CardMovie.vue'
 import { title } from 'process';
-
+import Movie from '~~/models/Movie';
+import { userInfo } from 'os';
 
 definePageMeta({
     middleware: ["authenticated"]
     // or middleware: 'auth'
 })
+
 
 const showModal = ref(false)
 const modalType = ref('')
@@ -21,7 +23,11 @@ const titleSearch = ref('')
 const yearSearch = ref('')
 const isLoadingSearch = ref(false)
 
+const movieInfo = ref<Movie>()
 
+onMounted(() => {
+
+})
 
 async function searchMovie() {
     isLoadingSearch.value = true
@@ -34,11 +40,18 @@ async function searchMovie() {
 
         let response;
         try {
-            
             response = await axios.get(baseUrl + `/?t=${titleSearch.value}&y=${yearSearch.value}&apikey=${apiKey}`)
 
             if (response != undefined && response.status == 200 && response.data.Response) {
-
+                let movie = {
+                    imdbID: response.data.imdbID,
+                    title: response.data.Year,
+                    year: response.data.Year,
+                    image: response.data.Poster,
+                    genre: response.data.Genre?.split(", "),
+                    isFavorite: false
+                }
+                movieInfo.value = movie
                 titleSearch.value = ''
                 yearSearch.value = ''
             }
@@ -65,6 +78,7 @@ async function searchMovie() {
     }
     isLoadingSearch.value = false
 }
+
 
 
 </script>
@@ -101,11 +115,13 @@ async function searchMovie() {
 
             </div>
 
-            <CardMovie></CardMovie>
+            <div v-if="movieInfo != undefined">
+                <CardMovie :movie-info-props="movieInfo"></CardMovie>
+            </div>
         </div>
 
 
-        
+
 
 
         <Footer class="shrink-0"></Footer>
