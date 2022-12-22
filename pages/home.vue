@@ -22,10 +22,12 @@ const messageModal = ref('')
 const titleSearch = ref('')
 const yearSearch = ref('')
 const isLoadingSearch = ref(false)
-
+const token = ref('')
 const movieInfo = ref<Movie>()
 
 onMounted(() => {
+
+   
 
 })
 
@@ -45,7 +47,7 @@ async function searchMovie() {
             if (response != undefined && response.status == 200 && response.data.Response) {
                 let movie = {
                     imdbID: response.data.imdbID,
-                    title: response.data.Year,
+                    title: response.data.Title,
                     year: response.data.Year,
                     image: response.data.Poster,
                     genre: response.data.Genre?.split(", "),
