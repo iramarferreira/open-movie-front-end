@@ -19,12 +19,12 @@ const messageModal = ref('')
 const token = ref('')
 
 const props = defineProps({
-    movieInfoProps: {type: Object, required: true}
+    movieInfoProps: { type: Object, required: true }
 })
 
 
 onMounted(() => {
-    if(localStorage.getItem('token') != undefined){
+    if (localStorage.getItem('token') != undefined) {
         token.value = localStorage.getItem('token')
     }
     console.log(token.value)
@@ -34,7 +34,7 @@ onMounted(() => {
     movieInfo.value = props.movieInfoProps;
 })
 
-watch(() => props.movieInfoProps, () =>{
+watch(() => props.movieInfoProps, () => {
     movieInfo.value = props.movieInfoProps
 })
 
@@ -48,7 +48,7 @@ async function saveFavorite() {
     }
     try {
         response = await axios.post(baseUrl + `/favorites`, obj, {
-            headers:{
+            headers: {
                 'Authorization': `Bearer ` + token.value
             }
         })
@@ -57,20 +57,23 @@ async function saveFavorite() {
 
             movieInfo.value.isFavorite = true;
         }
-        else if (response != undefined && response.status == 422) {
-            titleModal.value = 'Aviso'
-            modalType.value = 'warning'
-            messageModal.value =  response.data.msg
-            showModal.value = true
-        }
+
         console.log(response)
     } catch (error) {
 
-        console.error(error)
-        titleModal.value = 'Error'
-        modalType.value = 'error'
-        messageModal.value = 'Desculpa, aconteceu algum erro'
-        showModal.value = true
+        if (error?.response?.status == 422) {
+            console.error(error)
+            titleModal.value = 'Error'
+            modalType.value = 'warning'
+            messageModal.value = error?.response?.data.msg
+            showModal.value = true
+        } else {
+            console.error(error)
+            titleModal.value = 'Error'
+            modalType.value = 'error'
+            messageModal.value = 'Desculpa, aconteceu algum erro'
+            showModal.value = true
+        }
     }
 }
 
@@ -82,8 +85,8 @@ async function removeFavorite() {
     let response;
 
     try {
-        response = await axios.delete(baseUrl + `/favorites/${movieInfo.value.imdbID}`,{
-            headers:{
+        response = await axios.delete(baseUrl + `/favorites/${movieInfo.value.imdbID}`, {
+            headers: {
                 'Authorization': `Bearer ` + token.value
             }
         })
@@ -91,31 +94,38 @@ async function removeFavorite() {
         if (response != undefined && response.status == 200) {
 
             movieInfo.value.isFavorite = false;
-            
+
         }
         else if (response != undefined && response.status == 422) {
             titleModal.value = 'Aviso'
             modalType.value = 'warning'
-            messageModal.value =  response.data.msg
+            messageModal.value = response.data.msg
             showModal.value = true
         }
         console.log(response)
     } catch (error) {
-
-        console.error(error)
-        titleModal.value = 'Error'
-        modalType.value = 'error'
-        messageModal.value = 'Desculpa, aconteceu algum erro'
-        showModal.value = true
+        if (error?.response?.status == 422) {
+            console.error(error)
+            titleModal.value = 'Error'
+            modalType.value = 'error'
+            messageModal.value = error?.response?.data.msg
+            showModal.value = true
+        } else {
+            console.error(error)
+            titleModal.value = 'Error'
+            modalType.value = 'error'
+            messageModal.value = 'Desculpa, aconteceu algum erro'
+            showModal.value = true
+        }
     }
 
 }
 
 // check function save or delete
-function btStar(){
-    if(movieInfo.value.isFavorite){
+function btStar() {
+    if (movieInfo.value.isFavorite) {
         removeFavorite();
-    }else{
+    } else {
         saveFavorite();
     }
 }
@@ -124,9 +134,9 @@ function btStar(){
 
 
 <template>
-    
+
     <ModalSimple :show-modal-props="showModal" :title-modal-props="titleModal" :message-modal-props="messageModal"
-            :modal-type-props="modalType" @close-modal="(value) => showModal = value" />
+        :modal-type-props="modalType" @close-modal="(value) => showModal = value" />
 
     <div class="card w-full flex flex-row  rounded-lg sm:w-96 bg-base-100 shadow-lg">
         <div class="w-1/3 sm:w-full flex items-center justify-center">
@@ -138,15 +148,15 @@ function btStar(){
                 <p class=" text-base font-medium leading-4 tracking-tight">
                     {{ movieInfo.title }}
                 </p>
-                <button @click="btStar" > 
-                    <span :class="{'text-yellow-300': movieInfo.isFavorite}">
+                <button @click="btStar">
+                    <span :class="{ 'text-yellow-300': movieInfo.isFavorite }">
                         <StarIcon class="h-6 w-6"></StarIcon>
                     </span>
                 </button>
             </div>
 
             <div class="w-full px-2 grid grid-flow-col sm:grid-flow-row tracking-tight ">
-                <div v-for="badge in movieInfo.genre" class="m-0.5 badge badge-outline text-xs">{{badge}}</div>
+                <div v-for="badge in movieInfo.genre" class="m-0.5 badge badge-outline text-xs">{{ badge }}</div>
             </div>
         </div>
     </div>

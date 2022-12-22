@@ -5,6 +5,9 @@ import ModalSimple from '../components/ModalSimple.vue'
 import axios from 'axios'
 import { EnvelopeIcon, EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
 
+definePageMeta({
+  layout: false,
+});
 
 const user = ref<User>({
   email: '',

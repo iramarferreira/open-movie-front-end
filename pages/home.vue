@@ -27,7 +27,7 @@ const movieInfo = ref<Movie>()
 
 onMounted(() => {
 
-   
+
 
 })
 
@@ -57,12 +57,7 @@ async function searchMovie() {
                 titleSearch.value = ''
                 yearSearch.value = ''
             }
-            else if (response != undefined && response.status == 200 && !response.data.Response) {
-                titleModal.value = 'Aviso'
-                modalType.value = 'warning'
-                messageModal.value = 'Não foi encontrado resultados'
-                showModal.value = true
-            }
+
             console.log(response)
         } catch (error) {
 
@@ -86,47 +81,43 @@ async function searchMovie() {
 </script>
 
 <template>
-    <div class="relative w-full h-screen flex flex-col ">
-        <Header class="shrink-0"></Header>
-
-        <ModalSimple :show-modal-props="showModal" :title-modal-props="titleModal" :message-modal-props="messageModal"
-            :modal-type-props="modalType" @close-modal="(value) => showModal = value" />
 
 
-        <div class="h-full w-full flex flex-col sm:items-center  flex-1">
-            <!-- div fields -->
-            <p class="pt-4 px-4 font-medium text-base sm:text-lg">Busque um filme ou série por seu título e ano</p>
-            <div class="px-4 flex flex-col w-full items-start justify-center sm:flex-row sm:items-center">
+    <ModalSimple :show-modal-props="showModal" :title-modal-props="titleModal" :message-modal-props="messageModal"
+        :modal-type-props="modalType" @close-modal="(value) => showModal = value" />
 
-                <div class="flex items-center">
-                    <p class="mr-1">Título: </p>
-                    <input type="text" class="input input-bordered w-full max-w-xs " v-model="titleSearch" />
 
-                </div>
+    <div class="h-full w-full flex flex-col sm:items-center  flex-1">
+        <!-- div fields -->
+        <p class="pt-4 px-4 font-medium text-base sm:text-lg">Busque um filme ou série por seu título e ano</p>
+        <div class="px-4 flex flex-col w-full items-start justify-center sm:flex-row sm:items-center">
 
-                <div class="flex items-center">
-                    <p class="mx-1">Ano: </p>
-                    <input type="text" class="input w-20 input-bordered outline-none appearance-none"
-                        v-model="yearSearch" />
-
-                    <button @click="searchMovie" :class="{ 'loading': isLoadingSearch }"
-                        class="btn btn-primary w-fit rounded-full   m-2">
-                        <MagnifyingGlassIcon class="h-5 w-5"></MagnifyingGlassIcon>
-                    </button>
-                </div>
+            <div class="flex items-center">
+                <p class="mr-1">Título: </p>
+                <input type="text" class="input input-bordered w-full max-w-xs " v-model="titleSearch" />
 
             </div>
 
-            <div v-if="movieInfo != undefined">
-                <CardMovie :movie-info-props="movieInfo"></CardMovie>
+            <div class="flex items-center">
+                <p class="mx-1">Ano: </p>
+                <input type="text" class="input w-20 input-bordered outline-none appearance-none"
+                    v-model="yearSearch" />
+
+                <button @click="searchMovie" :class="{ 'loading': isLoadingSearch }"
+                    class="btn btn-primary w-fit rounded-full   m-2">
+                    <MagnifyingGlassIcon class="h-5 w-5"></MagnifyingGlassIcon>
+                </button>
             </div>
+
         </div>
 
-
-
-
-
-        <Footer class="shrink-0"></Footer>
-
+        <div v-if="movieInfo != undefined">
+            <CardMovie :movie-info-props="movieInfo"></CardMovie>
+        </div>
     </div>
+
+
+
+
+
 </template>
