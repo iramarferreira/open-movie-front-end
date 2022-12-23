@@ -8,6 +8,7 @@ import CardMovie from '../components/CardMovie.vue'
 import { title } from 'process';
 import Movie from '~~/models/Movie';
 import { userInfo } from 'os';
+import { useAuthStore } from '~~/stores/useAuthStore';
 
 definePageMeta({
     middleware: ["authenticated"]
@@ -24,11 +25,19 @@ const yearSearch = ref('')
 const isLoadingSearch = ref(false)
 const token = ref('')
 const movieInfo = ref<Movie>()
+const authStore = useAuthStore()
+
 
 onMounted(() => {
+    if (localStorage.getItem('user')) {
+        authStore.setUser(JSON.parse(localStorage.getItem('user')))
+    }
+    if (localStorage.getItem('token')) {
+        authStore.setToken(localStorage.getItem('token') || '')
+    }
 
-
-
+    console.log(authStore.token)
+    console.log(authStore.user)
 })
 
 async function searchMovie() {

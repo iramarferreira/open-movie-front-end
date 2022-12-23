@@ -8,6 +8,10 @@ definePageMeta({
     // or middleware: 'auth'
 })
 
+onMounted(() => {
+    
+})
+
 
 
 </script>

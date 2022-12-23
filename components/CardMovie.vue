@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { StarIcon } from '@heroicons/vue/24/outline'
 import Movie from '../models/Movie';
-import axios from 'axios'
+import axios from 'axios';
+import { useFavoriteStore } from '~~/stores/useFavoriteStore';
 
 const movieInfo = ref<Movie>({
     imdbID: 'tt19498174',
@@ -17,17 +18,10 @@ const modalType = ref('')
 const titleModal = ref('')
 const messageModal = ref('')
 const token = ref('')
+const favoriteStore = useFavoriteStore()
 
 const props = defineProps({
     movieInfoProps: { type: Object, required: true }
-})
-
-
-onMounted(() => {
-    if (localStorage.getItem('token') != undefined) {
-        token.value = localStorage.getItem('token')
-    }
-    console.log(token.value)
 })
 
 onMounted(() => {
@@ -38,85 +32,49 @@ watch(() => props.movieInfoProps, () => {
     movieInfo.value = props.movieInfoProps
 })
 
-async function saveFavorite() {
-    const runtimeConfig = useRuntimeConfig()
-    let baseUrl = runtimeConfig.public.API_BASE_URL_TST
+async function saveFavoriteMovie() {
 
-    let response;
-    let obj = {
-        imdbID: movieInfo.value?.imdbID
+    let response = await favoriteStore.saveFavorite(movieInfo.value?.imdbID)
+
+    if (response != undefined && response == 200) {
+
+        movieInfo.value.isFavorite = true;
     }
-    try {
-        response = await axios.post(baseUrl + `/favorites`, obj, {
-            headers: {
-                'Authorization': `Bearer ` + token.value
-            }
-        })
+    else if (response == 422) {
+        titleModal.value = 'Error'
+        modalType.value = 'warning'
+        messageModal.value = favoriteStore.messageError
+        showModal.value = true
+    } else {
 
-        if (response != undefined && response.status == 200) {
+        titleModal.value = 'Error'
+        modalType.value = 'error'
+        messageModal.value = favoriteStore.messageError
+        showModal.value = true
 
-            movieInfo.value.isFavorite = true;
-        }
-
-        console.log(response)
-    } catch (error) {
-
-        if (error?.response?.status == 422) {
-            console.error(error)
-            titleModal.value = 'Error'
-            modalType.value = 'warning'
-            messageModal.value = error?.response?.data.msg
-            showModal.value = true
-        } else {
-            console.error(error)
-            titleModal.value = 'Error'
-            modalType.value = 'error'
-            messageModal.value = 'Desculpa, aconteceu algum erro'
-            showModal.value = true
-        }
     }
 }
 
-async function removeFavorite() {
-    const runtimeConfig = useRuntimeConfig()
+async function removeFavoriteMovie() {
+   
+    let response = await favoriteStore.deleteFavorite(movieInfo.value?.imdbID)
 
-    let baseUrl = runtimeConfig.public.API_BASE_URL_TST
+    if (response != undefined && response == 200) {
 
-    let response;
+        movieInfo.value.isFavorite = false;
+    }
+    else if (response == 422) {
+        titleModal.value = 'Error'
+        modalType.value = 'warning'
+        messageModal.value = favoriteStore.messageError
+        showModal.value = true
+    } else {
 
-    try {
-        response = await axios.delete(baseUrl + `/favorites/${movieInfo.value.imdbID}`, {
-            headers: {
-                'Authorization': `Bearer ` + token.value
-            }
-        })
+        titleModal.value = 'Error'
+        modalType.value = 'error'
+        messageModal.value = favoriteStore.messageError
+        showModal.value = true
 
-        if (response != undefined && response.status == 200) {
-
-            movieInfo.value.isFavorite = false;
-
-        }
-        else if (response != undefined && response.status == 422) {
-            titleModal.value = 'Aviso'
-            modalType.value = 'warning'
-            messageModal.value = response.data.msg
-            showModal.value = true
-        }
-        console.log(response)
-    } catch (error) {
-        if (error?.response?.status == 422) {
-            console.error(error)
-            titleModal.value = 'Error'
-            modalType.value = 'error'
-            messageModal.value = error?.response?.data.msg
-            showModal.value = true
-        } else {
-            console.error(error)
-            titleModal.value = 'Error'
-            modalType.value = 'error'
-            messageModal.value = 'Desculpa, aconteceu algum erro'
-            showModal.value = true
-        }
     }
 
 }
@@ -124,9 +82,9 @@ async function removeFavorite() {
 // check function save or delete
 function btStar() {
     if (movieInfo.value.isFavorite) {
-        removeFavorite();
+        removeFavoriteMovie();
     } else {
-        saveFavorite();
+        saveFavoriteMovie();
     }
 }
 

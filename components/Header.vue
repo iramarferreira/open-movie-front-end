@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline'
+import { ArrowRightOnRectangleIcon, StarIcon } from '@heroicons/vue/24/outline'
 
 
 function signOut(){

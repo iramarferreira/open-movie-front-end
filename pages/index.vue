@@ -4,6 +4,8 @@ import User from '~~/models/User';
 import ModalSimple from '../components/ModalSimple.vue'
 import axios from 'axios'
 import { EnvelopeIcon, EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
+import { useAuthStore } from '~~/stores/useAuthStore';
+
 
 definePageMeta({
   layout: false,
@@ -26,13 +28,14 @@ const messageModal = ref('')
 const isPasswordSecret = ref(true)
 const inputEmail = ref('')
 const inputPassword = ref('')
-
+const authStore = useAuthStore()
 
 onMounted(() => {
   if (localStorage.getItem('user')) {
     user.value = JSON.parse(localStorage.getItem('user'))
     inputEmail.value = user.value.email
     inputPassword.value = user.value.password
+    
   }
 })
 
@@ -83,6 +86,8 @@ async function signIn() {
       if (response != undefined && response.status == 200) {
         localStorage.setItem('user', JSON.stringify(user.value))
         localStorage.setItem('token', response.data.user.token)
+        authStore.setToken(response.data.user.token)
+        authStore.setUser(user.value)
         window.location.href = '/home'
 
 
