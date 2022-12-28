@@ -96,9 +96,9 @@ function btStar() {
     <ModalSimple :show-modal-props="showModal" :title-modal-props="titleModal" :message-modal-props="messageModal"
         :modal-type-props="modalType" @close-modal="(value) => showModal = value" />
 
-    <div class="card w-full flex flex-row  rounded-lg sm:w-96 bg-base-100 shadow-lg">
-        <div class="w-1/3 sm:w-full flex items-center justify-center">
-            <figure class="rounded-lg w-full"><img :src="movieInfo.image" :alt="movieInfo.title" /></figure>
+    <div class="h-48 w-80 sm:h-64 w-full flex flex-row  rounded-lg sm:w-96 bg-base-100 shadow-lg">
+        <div class="h-full  w-1/3 sm:w-full flex items-center justify-center">
+            <figure class="w-full h-full flex items-center"><img  class="h-48 max-h-48 sm:h-60 sm:max-h-60 w-36 sm:w-40 rounded-lg " :src="movieInfo.image" :alt="movieInfo.title" /></figure>
         </div>
 
         <div class="w-2/3  sm:w-full flex flex-col mt-1">
