@@ -1,10 +1,18 @@
-# Nuxt 3 Minimal Starter
+# Projeto Web Open Movie
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Esse é um projeto desenvolvido para a disciplina de Front-end da 
+Residência em TI da UFRN/IMD com parceria do TST. O mesmo faz o consumo de duas APIs sendo uma a [OMDb API](https://www.omdbapi.com/) que é pública, e a outra API desenvolvida e disponibilizada pelo professor da disciplina que está disponível no seguinte [repositório](https://github.com/isaacfranco/tst_api).
 
-## Setup
+## Tecnologias
+- Nuxt
+- TypeScript
+- Tailwind CSS 
+- daisyUI
+- Pinia
 
-Make sure to install the dependencies:
+## Configuração
+
+Instale as dependências:
 
 ```bash
 # yarn
@@ -17,26 +25,28 @@ npm install
 pnpm install --shamefully-hoist
 ```
 
-## Development Server
+Depois, crie um arquivo `.env` na raiz do projeto e defina as variáveis que estão específicadas no arquivo `nuxt.config.ts`.
 
-Start the development server on http://localhost:3000
+## Execução em servidor local
+
+Inicie o servidor em http://localhost:3000
 
 ```bash
 npm run dev
 ```
 
-## Production
+## Produção
 
-Build the application for production:
+Criar aplicação para produção:
 
 ```bash
 npm run build
 ```
 
-Locally preview production build:
+Visualização localmente da aplicação pronta para produção:
 
 ```bash
 npm run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
