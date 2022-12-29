@@ -4,6 +4,10 @@ import User from '~~/models/User';
 import ModalSimple from '~~/components/ModalSimple.vue';
 import { EnvelopeIcon, EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
 
+definePageMeta({
+  layout: false,
+});
+
 const user = ref<User>({
   email: '',
   password: '',
