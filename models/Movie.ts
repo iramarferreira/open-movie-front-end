@@ -5,6 +5,8 @@ export default interface Movie{
     image?: string,
     genre?: string[],
     isFavorite?: boolean,
-    myReview?: string
+    hasReview?: boolean,
+    myReview?: string,
+    myStars?: number
 
 }

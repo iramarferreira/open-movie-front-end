@@ -36,8 +36,8 @@ onMounted(() => {
         authStore.setToken(localStorage.getItem('token') || '')
     }
 
-    console.log(authStore.token)
-    console.log(authStore.user)
+    // console.log(authStore.token)
+    // console.log(authStore.user)
 })
 
 async function searchMovie() {
@@ -67,7 +67,7 @@ async function searchMovie() {
                 yearSearch.value = ''
             }
 
-            console.log(response)
+            // console.log(response)
         } catch (error) {
 
             console.error(error)
@@ -96,7 +96,7 @@ async function searchMovie() {
         :modal-type-props="modalType" @close-modal="(value) => showModal = value" />
 
 
-    <div class="h-full w-full flex flex-col sm:items-center  flex-1">
+    <div class="h-full w-full flex flex-col sm:items-center ">
         <!-- div fields -->
         <p class="pt-4 px-4 font-medium text-base sm:text-lg">Busque um filme ou série por seu título e ano</p>
         <div class="px-4 flex flex-col w-full items-start justify-center sm:flex-row sm:items-center">

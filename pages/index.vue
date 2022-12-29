@@ -43,7 +43,7 @@ watch(rememberCheck, (newValue) => {
   if (newValue) {
     localStorage.setItem('user', JSON.stringify(user.value))
   }
-  console.log(newValue)
+  // console.log(newValue)
 })
 
 
@@ -71,7 +71,7 @@ async function signIn() {
   let baseUrl = runtimeConfig.public.API_BASE_URL_TST
 
 
-  console.log(user.value)
+  // console.log(user.value)
   // check empty fields
   if (user.value.email?.length != 0 && user.value.password?.length != 0) {
     let response;
@@ -84,7 +84,7 @@ async function signIn() {
       // request endpoint
       response = await axios.post(baseUrl + '/auth/signin', objRequest)
       if (response != undefined && response.status == 200) {
-        localStorage.setItem('user', JSON.stringify(user.value))
+        localStorage.setItem('user', JSON.stringify(response.data.user))
         localStorage.setItem('token', response.data.user.token)
         authStore.setToken(response.data.user.token)
         authStore.setUser(user.value)

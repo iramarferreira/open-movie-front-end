@@ -11,13 +11,24 @@ export const useReviewStore = defineStore('review', () => {
     const messageError = ref()
     const runtimeConfig = useRuntimeConfig()
 
+    function findReviewById(imdbID: string){
+        for(let i = 0; i < myReviews.value.length; i++){
+            if(myReviews.value[i].imdbID == imdbID){
+                return myReviews.value[i]
+            }
+        }
+        return null
+    }
+
+
+
     // save review
-    async function saveReview(msg: string, stars: number, imdbID: string) {
+    async function saveReview(comment: string, stars: number, imdbID: string) {
         let baseUrl = runtimeConfig.public.API_BASE_URL_TST
 
         let response;
         let obj = {
-            msg,
+            comment,
             stars
         }
         try {
@@ -32,7 +43,7 @@ export const useReviewStore = defineStore('review', () => {
                 return 200;
             }
 
-            console.log(response)
+            // console.log(response)
         } catch (error) {
 
             if (error?.response?.status == 422) {
@@ -53,10 +64,7 @@ export const useReviewStore = defineStore('review', () => {
         let baseUrl = runtimeConfig.public.API_BASE_URL_TST
 
         let response;
-        let obj = {
-            msg,
-            stars
-        }
+        // console.log(authStore.token)
         try {
             response = await axios.delete(baseUrl + `/reviews/${imdbID}`, {
                 headers: {
@@ -69,7 +77,7 @@ export const useReviewStore = defineStore('review', () => {
                 return 200;
             }
 
-            console.log(response)
+            // console.log(response)
         } catch (error) {
 
             if (error?.response?.status == 422) {
@@ -102,7 +110,7 @@ export const useReviewStore = defineStore('review', () => {
                 return 200;
             }
 
-            console.log(response)
+            // console.log(response)
         } catch (error) {
 
             if (error?.response?.status == 422) {
@@ -132,11 +140,11 @@ export const useReviewStore = defineStore('review', () => {
             })
 
             if (response != undefined && response.status == 200) {
-                reviewsMovie.value = response.data.reviews
-                return 200;
+                return response
+                // return 200;
             }
 
-            console.log(response)
+            // console.log(response)
         } catch (error) {
 
             if (error?.response?.status == 422) {
@@ -151,6 +159,6 @@ export const useReviewStore = defineStore('review', () => {
         }
     }
 
-    return {myReviews, reviewsMovie, messageError, saveReview, deleteReview, getReviewsMy, getReviewsMovie}
+    return {myReviews, reviewsMovie, messageError, saveReview, deleteReview, getReviewsMy, getReviewsMovie, findReviewById}
 
 })

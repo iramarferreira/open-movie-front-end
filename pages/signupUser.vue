@@ -56,7 +56,7 @@ async function signUp() {
     }
 
 
-    console.log(response)
+    // console.log(response)
   } else {
     titleModal.value = 'Aviso'
     modalType.value = 'warning'

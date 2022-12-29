@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from './useAuthStore';
+import { useReviewStore } from '~~/stores/useReviewStore';
 import Movie from '../models/Movie';
 import axios from 'axios';
 
@@ -7,6 +8,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
     const favoritesId = ref([])
     const favorites = ref([])
     const authStore = useAuthStore()
+    const reviewStore = useReviewStore()
     const messageError = ref()
     const runtimeConfig = useRuntimeConfig()
 
@@ -30,7 +32,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
                 return 200;
             }
 
-            console.log(response)
+            // console.log(response)
         } catch (error) {
 
             if (error?.response?.status == 422) {
@@ -68,7 +70,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
                 return 200;
             }
 
-            console.log(response)
+            // console.log(response)
         } catch (error) {
 
             if (error?.response?.status == 422) {
@@ -85,11 +87,13 @@ export const useFavoriteStore = defineStore('favorite', () => {
 
     // get favorites
     async function getFavorites() {
+        // get reviews
+        await reviewStore.getReviewsMy();
 
         let baseUrl = runtimeConfig.public.API_BASE_URL_TST
 
         let response;
-        console.log(authStore.token)
+        // console.log(authStore.token)
         try {
             response = await axios.get(baseUrl + `/favorites`, {
                 headers: {
@@ -134,14 +138,23 @@ export const useFavoriteStore = defineStore('favorite', () => {
                     myReview: '',
                     isFavorite: true,
                     title: response.data.Title,
-                    year: response.data.Year
+                    year: response.data.Year,
+                    hasReview: false,
+                    myStars: 0,
+                }
+                // review
+                let review = reviewStore.findReviewById(response.data.imdbID)
+                if(review != null){
+                    objMovie.hasReview = true;
+                    objMovie.myReview = review.comment;
+                    objMovie.myStars = review.stars;
                 }
                 return objMovie;
             }
 
         } catch (error) {
             return null
-            console.log(error)
+            // console.log(error)
         }
 
     }
@@ -153,9 +166,9 @@ export const useFavoriteStore = defineStore('favorite', () => {
         let response;
 
         for (let i = 0; i < arr.length; i++) {
-            console.log(i)
+            // console.log(i)
             let obj = await getMovieOMD(arr[i].imdbID)
-            console.log(obj)
+            // console.log(obj)
             if (obj != null)
                 favorites.value.push(obj)
         }
